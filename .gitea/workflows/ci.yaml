@@ -2,13 +2,22 @@ name: Build and push docker image
 on: [push]
 
 jobs:
-  build-and-push:
+  build:
     runs-on: ubuntu-latest
-    container:
-      image: jani888/gitea-runner:latest
     steps:
-      - run: echo "${{ secrets.REGISTRY_PASSWORD }}" | docker login gitea.ssa.skillsit.hu -u ${{secrets.REGISTRY_USER}} --password-stdin
-      - name: Check out repository code
-        uses: actions/checkout@v3
-      - run: docker build . -t gitea.ssa.skillsit.hu/competitors/${{gitea.event.repository.name}}:latest
-      - run: docker push gitea.ssa.skillsit.hu/competitors/${{gitea.event.repository.name}}:latest
+      - uses: actions/checkout@v3
+
+      - name: Build the Docker image
+        run: docker build . --tag git.ssa.skillsit.hu/${{ github.repository }}:latest
+
+      - name: docker login
+        run: echo "${{ secrets.PASS }}" | docker login git.ssa.skillsit.hu -u ${{secrets.USER}} --password-stdin
+
+      - name: push to docker hub
+        run: docker push git.ssa.skillsit.hu/${{ github.repository }}:latest
+
+      - uses: httpfoundation/docker-manager-deploy-action@v1z
+        with:
+          image: git.ssa.skillsit.hu/${{ github.repository }}
+          base-url: https://clara.ssa.skillsit.hu
+          token: ${{ secrets.DOCKER_MANAGER_TOKEN }}
