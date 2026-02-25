@@ -16,8 +16,8 @@ jobs:
       - name: push to docker hub
         run: docker push git.ssa.skillsit.hu/${{ github.repository }}:latest
 
-      - uses: httpfoundation/docker-manager-deploy-action@v1z
+      - uses: httpfoundation/pulldeck-deploy-action@v1
         with:
           image: git.ssa.skillsit.hu/${{ github.repository }}
-          base-url: https://clara.ssa.skillsit.hu
-          token: ${{ secrets.DOCKER_MANAGER_TOKEN }}
+          base-url: https://pulldeck.ssa.skillsit.hu
+          token: ${{ secrets.PULLDECK_TOKEN }}
