@@ -8,16 +8,16 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Build the Docker image
-        run: docker build . --tag git.ssa.skillsit.hu/${{ github.repository }}:latest
+        run: docker build . --tag git.sfc.skillsit.eu/${{ github.repository }}:latest
 
       - name: docker login
-        run: echo "${{ secrets.PASS }}" | docker login git.ssa.skillsit.hu -u ${{secrets.USER}} --password-stdin
+        run: echo "${{ secrets.PASS }}" | docker login git.sfc.skillsit.eu -u ${{secrets.USER}} --password-stdin
 
       - name: push to docker hub
-        run: docker push git.ssa.skillsit.hu/${{ github.repository }}:latest
+        run: docker push git.sfc.skillsit.eu/${{ github.repository }}:latest
 
       - uses: httpfoundation/pulldeck-deploy-action@v1
         with:
-          image: git.ssa.skillsit.hu/${{ github.repository }}
-          base-url: https://pulldeck.ssa.skillsit.hu
+          image: git.sfc.skillsit.eu/${{ github.repository }}
+          base-url: https://pulldeck.sfc.skillsit.eu
           token: ${{ secrets.PULLDECK_TOKEN }}
